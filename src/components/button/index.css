@@ -1,0 +1,88 @@
+.button {
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  color: #fb0207;
+  border-radius: 15px;
+  font-size: calc(.5em + 1vw);
+  cursor: pointer;
+  width: calc(.5em + 10vw);
+  height: auto;
+  padding: calc(.2vw + .2vh) 0;
+  background-color: #fffe67;
+}
+.button:hover, .button-link:hover {
+  color: #fb0207;
+  opacity: .7;
+}
+/* CSS */
+.button-convert {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #fa6400;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 2rem;
+  padding: 5px 10px;
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+.button-convert:hover,
+.button-convert:focus {
+  background-color: #fb8332;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.button-convert:hover {
+  transform: translateY(-1px);
+}
+
+.button-convert:active {
+  background-color: #c85000;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+@media(max-width : 2500px) {
+  .button {
+    border-radius: 10px;
+  }
+ }
+ @media(max-width : 1400px) {
+  .button {
+    border-radius: 5px;
+  }
+ }
+ @media(max-width : 800px) {
+  .button {
+    font-size: calc(.5em + .5vw);
+  }
+ }
+ @media(max-width : 550px) {
+  .button {
+    margin-top: 0px !important;
+  }
+ }
+
+ @media(max-width : 360px) {
+  .button {
+    width: calc(.5em + 12.5vw);
+  }
+ }

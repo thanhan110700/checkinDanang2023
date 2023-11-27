@@ -1,0 +1,48 @@
+{
+  "name": "check-in-nhs",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@react-three/drei": "^9.88.17",
+    "@react-three/fiber": "^8.15.11",
+    "antd": "^4.23.2",
+    "file-saver": "^2.0.5",
+    "firebase": "^9.9.1",
+    "moment": "^2.29.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-qr-scanner": "^1.0.0-alpha.8",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-toastify": "^9.0.7",
+    "sweetalert2": "^11.6.14",
+    "three": "^0.158.0",
+    "uuid": "^8.3.2",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

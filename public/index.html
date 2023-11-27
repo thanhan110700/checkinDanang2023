@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+    />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="icon" href="logo.svg" type="image/gif" sizes="24x24" />
+
+    <title>CẢNG ĐÀ NẴNG</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div
+      id="lotteryMachine"
+      style="
+        position: fixed;
+        top: 50%;
+        z-index: 999999;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+      "
+      class="justify-content-center flex-column align-items-center"
+    ></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+      src="./index.js"
+      url="https://www.jaypung.com/js/luckyball/lotteryMachine.min.js"
+    ></script>
+    <script>
+      $(function () {
+        var machine = $("#lotteryMachine").lotteryMachine({
+          containerRadius: Math.round(window.innerWidth / 10),
+          waitInterval: 0,
+          playSound: false,
+          callback: function (data) {},
+        });
+      });
+    </script>
+  </body>
+</html>
