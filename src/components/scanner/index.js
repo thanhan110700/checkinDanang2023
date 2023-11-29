@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import QrReader from "react-qr-scanner";
 import manhinhcheckin from "../../assets/manhinhcheckin.png";
 function Scanner({ onScan }) {
@@ -46,7 +46,7 @@ function Scanner({ onScan }) {
             constraints={{
               video: { deviceId: device.deviceId },
             }}
-            delay={200}
+            delay={500}
             onError={handleError}
             onScan={handleScan}
             onLoad={() => {
