@@ -61,7 +61,6 @@ const QuaySoTab = ({ dsTrungGiai }) => {
       );
       let dsTrungGiaiSnap = await getDocs(collection(db, "dstrunggiai"));
 
-      console.log(setUnitArr);
       setUnitArr = setUnitArr.filter((u) => {
         return (
           !dsTrungGiaiSnap.docs.find((d) => {
@@ -114,7 +113,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
     <div
       className="w-100 "
       style={{
-        maxHeight: "55vh",
+        maxHeight: "90vh",
         overflowY: "auto",
         marginTop: "1vh",
       }}
@@ -126,6 +125,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
             position: "relative",
           }}
         >
+          
           <div
             style={{
               position: "absolute",
@@ -136,10 +136,13 @@ const QuaySoTab = ({ dsTrungGiai }) => {
               left: "50%",
               transform: "translateX(-50%)",
               marginTop: "5vh",
+              height: "90vh",
+              width: "90vw",
             }}
           >
+   
             <h2
-              className="font-large text-center border-text-white text-orange m-auto"
+              className="font-large text-center border-text-white text-orange mx-auto"
               style={{
                 textTransform: "uppercase",
                 fontSize: "2.25vw",
@@ -148,7 +151,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
               }}
             >
               <span className="text-red cyen">ĐANG QUAY {giai.name}</span>
-              {dataRadom ? (
+              {dataRadom && isLoadingRandom ? (
                 <LuckyWheel
                   users={dataRadom}
                   setDataRandom={setDataRandom}
