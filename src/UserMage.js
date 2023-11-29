@@ -16,6 +16,7 @@ import CreateUserModal from "./components/CreateUserModalx";
 import UpdateUserModal from "./components/UpdateUserModal";
 import { db } from "./firebase";
 import useDebounce from "./hooks/useDebounce";
+import SettingCheckInModal from "./components/SettingCheckInModal";
 
 const UserMage = () => {
   const [users, setUsers] = useState([]);
@@ -24,6 +25,7 @@ const UserMage = () => {
   const [selectUser, setSelectedUser] = useState(null);
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [showCoCauModal, setCoCauModal] = useState(false);
+  const [showModalSettingCheckIn, setShowModalSettingCheckIn] = useState(false);
   const [tabs, setTabs] = useState([]);
   const debouncedValue = useDebounce(search, 600);
   const debouncedTenCongTy = useDebounce(searchCongTy, 600);
@@ -121,10 +123,17 @@ const UserMage = () => {
           </button>
 
           <button
-            className="btn text-danger btn-warning text-bold"
+            className="btn text-danger btn-warning text-bold me-4"
             onClick={() => setShowModalCreate(true)}
           >
             Thêm mới khách hàng
+          </button>
+
+          <button
+            className="btn text-danger btn-warning text-bold"
+            onClick={() => setShowModalSettingCheckIn(true)}
+          >
+            Thiết lập Check in
           </button>
         </div>
 
@@ -268,6 +277,11 @@ const UserMage = () => {
       <CoCauGiaiThuongModal
         modalIsOpen={showCoCauModal}
         setIsOpen={setCoCauModal}
+      />
+
+      <SettingCheckInModal
+        modalIsOpen={showModalSettingCheckIn}
+        setIsOpen={setShowModalSettingCheckIn}
       />
     </>
   );

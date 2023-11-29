@@ -60,6 +60,18 @@
   box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
   transform: translateY(0);
 }
+
+.button-camera {
+  background-color: #eba577;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  color: #fff;
+  border: none;
+  height: fit-content;
+  width: fit-content;
+  padding: 1vh;
+}
+
 @media(max-width : 2500px) {
   .button {
     border-radius: 10px;

@@ -9,7 +9,6 @@ const SubCreateUserModal = ({ modalIsOpen, setIsOpen }) => {
   const [form, setForm] = useState({
     userImg: "",
     name: "",
-
     qrcode: "",
   });
 

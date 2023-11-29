@@ -8,7 +8,6 @@ import {
 } from "firebase/firestore";
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import Scanner from "./components/scanner";
 import { db } from "./firebase";
@@ -16,61 +15,134 @@ import { db } from "./firebase";
 import chaomung from "./assets/checkin.png";
 
 import soban from "./assets/soban.png";
+import CameraCustom from "./components/CameraCustom";
+import { MODE_SETTING_CHECK_IN, READY_TIME_DEFAULT } from "./config/constant";
+import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   const [userCurrent, setUserCurrent] = useState(null);
+  const [settingCheckIn, setSettingCheckIn] = useState({
+    mode: MODE_SETTING_CHECK_IN.MANUAL,
+    readyTime: READY_TIME_DEFAULT,
+  });
+  const [checking, setChecking] = useState(false);
+  const [useCamera, setUseCamera] = useState(false);
   const prev = useRef("");
-
-  const scan = useCallback(async (value) => {
-    if (value === prev.current) {
-      return;
-    } else {
+  const scan = useCallback(
+    async (value) => {
+      if (checking) return;
+      setChecking(true);
+      if (value === prev.current && userCurrent) {
+        toast.success(
+          `Bạn vừa check in! ${
+            +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
+              ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
+              : "Chúng tôi muốn lấy lại hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
+          }`,
+          {
+            position: "top-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            style: {
+              width: "60vw", // Set the width
+              fontSize: "1.15vw",
+            },
+          }
+        );
+        setUseCamera(true);
+        return;
+      }
       prev.current = value;
-    }
 
-    const q = query(
-      collection(db, "users"),
-      where("qrcode", "==", value || "")
-    );
-
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(async (_doc) => {
-      const date = moment().valueOf();
-      const dateString = moment(date).format("DD-MM-YYYY").toString();
-      setUserCurrent({ ..._doc.data(), checkIn: date });
-      const q2 = query(
-        collection(db, "checkIns_test_5"),
-        where("qrcode", "==", _doc.data().qrcode)
+      const q = query(
+        collection(db, "users"),
+        where("qrcode", "==", value || "")
       );
-      let checkExist = false;
-      // let snapCheckTime;
-      for (let snap of (await getDocs(q2)).docs) {
-        if (
-          dateString ===
-          moment(snap.data().checkIn).format("DD-MM-YYYY").toString()
-        ) {
-          checkExist = true;
-          // snapCheckTime = moment(snap.data().checkIn)
-          //   .format("DD-MM-YYYY HH:MM:SS")
-          //   .toString();
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach(async (_doc) => {
+        const date = moment().valueOf();
+        const dateString = moment(date).format("DD-MM-YYYY").toString();
+        setUserCurrent({ ..._doc.data(), checkIn: date });
+        const q2 = query(
+          collection(db, "checkIns_test_5"),
+          where("qrcode", "==", _doc.data().qrcode)
+        );
+        let checkExist = false;
+        // let snapCheckTime;
+        for (let snap of (await getDocs(q2)).docs) {
+          if (
+            dateString ===
+            moment(snap.data().checkIn).format("DD-MM-YYYY").toString()
+          ) {
+            checkExist = true;
+          }
         }
-      }
-      if (!checkExist) {
-        await setDoc(doc(db, "checkIns_test_5", uuidv4()), {
-          ..._doc.data(),
-          checkIn: date,
-        });
-      } else {
-        // Swal.fire({
-        //   icon: "success",
-        //   title: `Bạn đã checkIn vào lúc ${snapCheckTime}`,
-        //   timer: 5000,
-        // });
-      }
+        if (!checkExist) {
+          await setDoc(doc(db, "checkIns_test_5", _doc.data().qrcode), {
+            ..._doc.data(),
+            checkIn: date,
+          });
+          toast.success(
+            `Chào mừng bạn! ${
+              +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
+                ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
+                : "Chúng tôi muốn lấy hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
+            }`,
+            {
+              position: "top-left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              style: {
+                width: "60vw", // Set the width
+                fontSize: "1.15vw",
+              },
+            }
+          );
+        } else {
+          toast.success(
+            `Bạn đã check in trước đó! ${
+              +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
+                ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
+                : "Chúng tôi muốn lấy hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
+            }`,
+            {
+              position: "top-left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              style: {
+                width: "60vw", // Set the width
+                fontSize: "1.15vw",
+              },
+            }
+          );
+        }
+        setUseCamera(true);
+      });
+    },
+    [settingCheckIn]
+  );
+
+  useEffect(() => {
+    const q = query(collection(db, "setting_check_in"));
+    getDocs(q).then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        setSettingCheckIn(doc.data());
+      });
     });
   }, []);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (navigator.getUserMedia) {
@@ -95,6 +167,7 @@ function App() {
 
   return (
     <div className={` main-wrapper position-relative`}>
+      <ToastContainer />
       <div className="h-100 d-flex flex-column">
         <div
           className="w-100  d-flex justify-content-center align-items-center"
@@ -109,7 +182,17 @@ function App() {
               width: "40%",
             }}
           >
-            <Scanner onScan={scan} />
+            {useCamera ? (
+              <CameraCustom
+                settingCheckIn={settingCheckIn}
+                useCamera={useCamera}
+                setUseCamera={setUseCamera}
+                userCurrent={userCurrent}
+                setChecking={setChecking}
+              />
+            ) : (
+              <Scanner onScan={scan} />
+            )}
           </div>
           <div
             className="d-flex align-items-center"
@@ -123,7 +206,7 @@ function App() {
           >
             <div className="d-flex flex-column align-items-center">
               <h2
-                className="font-large text-center  text-blue"
+                className="font-large text-center text-blue"
                 style={{
                   textTransform: "uppercase",
                   marginBottom: "1.15vh",
@@ -191,58 +274,6 @@ function App() {
                 </div>
               </div>
             </div>
-            {/* <div>
-              <h2
-                className="font-large text-center border-text-white text-orange"
-                style={{
-                  textTransform: "uppercase",
-                  marginBottom: "1.15vh",
-                  lineHeight: 1.35,
-                }}
-              >
-                NHIỆT LIỆT CHÀO MỪNG
-              </h2>
-              <h2
-                className="font-large text-center  text-blue"
-                style={{
-                  textTransform: "uppercase",
-                  marginBottom: "1.15vh",
-                  lineHeight: 1.35,
-                }}
-              >
-                {userCurrent?.nguoidaidien || "- - - - - - - -"}
-              </h2>
-              <h2
-                className="font-large text-center  text-blue"
-                style={{
-                  textTransform: "uppercase",
-                  marginBottom: "1.15vh",
-                  lineHeight: 1.35,
-                }}
-              >
-                {userCurrent?.tencongty || "- - - - - - - -"}
-              </h2>
-              <h2
-                className="font-large text-center border-text-white text-orange"
-                style={{
-                  textTransform: "uppercase",
-                  marginBottom: "1.15vh",
-                  lineHeight: 1.35,
-                }}
-              >
-                ĐÃ VỀ THAM DỰ HỘI NGHỊ
-              </h2>
-              <h2
-                className="font-large text-center  text-blue"
-                style={{
-                  textTransform: "uppercase",
-                  marginBottom: "1.15vh",
-                  lineHeight: 1.35,
-                }}
-              >
-                SỐ BÀN : {userCurrent?.soban || "- - - - - - - -"}
-              </h2>
-            </div> */}
           </div>
         </div>
       </div>
