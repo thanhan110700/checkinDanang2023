@@ -12,7 +12,6 @@ const LuckyWheel = ({
   setDataRandom,
   giai,
 }) => {
-  const [isSpinning, setIsSpinning] = useState(true);
   let luckyWheelRender;
   /** @type {React.MutableRefObject<HTMLCanvasElement|null>} */
   const appCanvas = useRef(null);
@@ -48,7 +47,6 @@ const LuckyWheel = ({
             idGiaiThuong: uuidv4(),
             quanlity: giai?.quanlity,
           });
-          setIsSpinning(false);
           onClose();
           setTimeout(() => {
             setDataRandom(
@@ -63,7 +61,6 @@ const LuckyWheel = ({
   };
 
   const onClose = () => {
-    if (isSpinning) return;
     pcStateRef.current.close();
     setIsLoadingRandom(false);
   };
@@ -90,20 +87,6 @@ const LuckyWheel = ({
         backgroundImage: 'url("../assets/nenthongke.png")',
       }}
     >
-      <div>
-        <div
-          style={{
-            position: "absolute",
-            top: "1vh",
-            right: "1vh",
-            cursor: "pointer",
-            fontSize: "2vw",
-          }}
-          onClick={onClose}
-        >
-          X
-        </div>
-      </div>
       <canvas ref={appCanvas} id="playcanvas-application"></canvas>
     </div>
   );
