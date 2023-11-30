@@ -5,10 +5,12 @@
   "dependencies": {
     "@react-three/drei": "^9.88.17",
     "@react-three/fiber": "^8.15.11",
+    "@tweenjs/tween.js": "^21.0.0",
     "antd": "^4.23.2",
     "file-saver": "^2.0.5",
     "firebase": "^9.9.1",
     "moment": "^2.29.4",
+    "playcanvas": "^1.67.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-qr-scanner": "^1.0.0-alpha.11",
