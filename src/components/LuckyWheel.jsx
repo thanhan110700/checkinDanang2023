@@ -12,15 +12,13 @@ const LuckyWheel = ({
   setDataRandom,
   giai,
 }) => {
-  const [isSpinning, setIsSpinning] = useState(false);
-  console.log(luckyMember);
+  const [isSpinning, setIsSpinning] = useState(true);
   let luckyWheelRender;
   /** @type {React.MutableRefObject<HTMLCanvasElement|null>} */
   const appCanvas = useRef(null);
 
   /** @type {React.MutableRefObject<PlayCanvasState>} */
   const pcStateRef = useRef(new LuckyWheelRender());
-  console.log(users);
   const onAppReady = () => {
     let data = users.map((user, index) => ({
       name: user.nguoidaidien,
@@ -52,11 +50,13 @@ const LuckyWheel = ({
           });
           setIsSpinning(false);
           onClose();
-          setDataRandom(
-            users.filter((d) => {
-              return d.qrcode !== luckyMember.qrcode;
-            })
-          );
+          setTimeout(() => {
+            setDataRandom(
+              users.filter((d) => {
+                return d.qrcode !== luckyMember.qrcode;
+              })
+            );
+          }, 1000);
         }, 3000);
       });
     }, 3000);
@@ -85,7 +85,11 @@ const LuckyWheel = ({
   }, [users]);
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: 'url("../assets/nenthongke.png")',
+      }}
+    >
       <div>
         <div
           style={{
