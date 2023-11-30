@@ -1,7 +1,7 @@
-import { memo, useEffect, useState } from "react";
-import QrReader from "react-qr-scanner";
+import { useEffect, useState } from "react";
 import manhinhcheckin from "../../assets/manhinhcheckin.png";
-function Scanner({ onScan }) {
+import { QrReader } from "react-qr-reader";
+function Scanner({ onScan, setChecking }) {
   const [device, setDevice] = useState(null);
   useEffect(() => {
     getDevices();
@@ -16,8 +16,13 @@ function Scanner({ onScan }) {
     });
   };
 
-  const handleScan = (data) => {
+  const handleScan = (data, error) => {
     if (!data) return;
+    if (error) {
+      alert(error);
+      return;
+    }
+    setChecking(true);
     onScan && onScan(data.text);
   };
 
@@ -26,7 +31,7 @@ function Scanner({ onScan }) {
   };
 
   return (
-    <div className="d-flex flex-column w-100 h-100">
+    <div className="d-flex flex-column ">
       {device && (
         <div
           style={{
@@ -37,22 +42,25 @@ function Scanner({ onScan }) {
             style={{
               width: "100%",
               position: "absolute",
+              zIndex: 2,
             }}
             src={manhinhcheckin}
             alt=""
           />
-          <QrReader
-            className="scanner"
-            constraints={{
-              video: { deviceId: device.deviceId },
-            }}
-            delay={500}
-            onError={handleError}
-            onScan={handleScan}
-            onLoad={() => {
-              console.log("loaded");
-            }}
-          />
+          <div>
+            <QrReader
+              className="scanner"
+              scanDelay={1000}
+              onError={handleError}
+              onResult={handleScan}
+              onLoad={() => {
+                console.log("loaded");
+              }}
+              videoContainerStyle={{
+                paddingTop: "80%",
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

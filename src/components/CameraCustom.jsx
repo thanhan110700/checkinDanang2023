@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo, memo } from "react";
 import manhinhcheckin from "../assets/manhinhcheckin.png";
 import { API_CONVERT_IMAGE, MODE_SETTING_CHECK_IN } from "../config/constant";
-import { collection, doc, query, setDoc, where } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { base64toFile } from "../function";
 import { toast } from "react-toastify";
@@ -15,12 +15,10 @@ const CameraCustom = ({
   setChecking,
 }) => {
   const { mode, ready_time: readyTime } = settingCheckIn;
-  console.log(userCurrent);
   const { qrcode } = userCurrent;
   const isAuto = useMemo(() => +mode === MODE_SETTING_CHECK_IN.AUTO, [mode]);
   const videoRef = useRef(null);
   const [selectedDeviceId, setSelectedDeviceId] = useState(null);
-
   const startCamera = async () => {
     try {
       const constraints = selectedDeviceId
@@ -147,12 +145,25 @@ const CameraCustom = ({
           style={{
             width: "100%",
             position: "absolute",
+            zIndex: 2,
           }}
           src={manhinhcheckin}
           alt=""
         />
         <div>
-          <video className="scanner" ref={videoRef} autoPlay playsInline />
+          <video
+            style={{
+              transform: " scaleX(-1)",
+              width: "95%",
+              marginTop: "0.5vh",
+              marginLeft: "0.5vh",
+              objectFit: "cover",
+              zIndex: 1,
+            }}
+            ref={videoRef}
+            autoPlay
+            playsInline
+          />
         </div>
       </div>
       <img
@@ -172,4 +183,4 @@ const CameraCustom = ({
   );
 };
 
-export default memo(CameraCustom);
+export default CameraCustom;

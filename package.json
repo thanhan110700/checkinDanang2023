@@ -13,7 +13,7 @@
     "playcanvas": "^1.67.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-qr-scanner": "^1.0.0-alpha.11",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.7",

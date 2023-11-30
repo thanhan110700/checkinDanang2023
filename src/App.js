@@ -16,44 +16,28 @@ import chaomung from "./assets/checkin.png";
 
 import soban from "./assets/soban.png";
 import CameraCustom from "./components/CameraCustom";
-import { MODE_SETTING_CHECK_IN, READY_TIME_DEFAULT } from "./config/constant";
+import { MODE_SETTING_CHECK_IN } from "./config/constant";
 import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   const [userCurrent, setUserCurrent] = useState(null);
-  const [settingCheckIn, setSettingCheckIn] = useState({
-    mode: MODE_SETTING_CHECK_IN.MANUAL,
-    readyTime: READY_TIME_DEFAULT,
-  });
+  const [settingCheckIn, setSettingCheckIn] = useState(null);
   const [checking, setChecking] = useState(false);
   const [useCamera, setUseCamera] = useState(false);
   const prev = useRef("");
+  useEffect(() => {
+    const q = query(collection(db, "setting_check_in"));
+    getDocs(q).then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        setSettingCheckIn(doc.data());
+      });
+    });
+  }, []);
+
   const scan = useCallback(
     async (value) => {
       if (checking) return;
-      setChecking(true);
-      if (value === prev.current && userCurrent) {
-        toast.success(
-          `Bạn vừa check in! ${
-            +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
-              ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
-              : "Chúng tôi muốn lấy lại hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
-          }`,
-          {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            style: {
-              width: "60vw", // Set the width
-              fontSize: "1.15vw",
-            },
-          }
-        );
-        setUseCamera(true);
+      if (value === prev.current) {
         return;
       }
       prev.current = value;
@@ -88,7 +72,7 @@ function App() {
             checkIn: date,
           });
           toast.success(
-            `Chào mừng bạn! ${
+            `Check In thành công! ${
               +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
                 ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
                 : "Chúng tôi muốn lấy hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
@@ -109,7 +93,7 @@ function App() {
           );
         } else {
           toast.success(
-            `Bạn đã check in trước đó! ${
+            `Bạn đã Check In rồi! ${
               +settingCheckIn.mode === MODE_SETTING_CHECK_IN.AUTO
                 ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
                 : "Chúng tôi muốn lấy hình ảnh chân dung của bạn, Hãy nhấn vào nút bên dưới để chụp ảnh"
@@ -132,17 +116,8 @@ function App() {
         setUseCamera(true);
       });
     },
-    [settingCheckIn]
+    [settingCheckIn, checking]
   );
-
-  useEffect(() => {
-    const q = query(collection(db, "setting_check_in"));
-    getDocs(q).then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        setSettingCheckIn(doc.data());
-      });
-    });
-  }, []);
 
   useEffect(() => {
     if (navigator.getUserMedia) {
@@ -191,7 +166,9 @@ function App() {
                 setChecking={setChecking}
               />
             ) : (
-              <Scanner onScan={scan} />
+              settingCheckIn && (
+                <Scanner onScan={scan} setChecking={setChecking} />
+              )
             )}
           </div>
           <div

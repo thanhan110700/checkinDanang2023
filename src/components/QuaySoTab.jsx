@@ -25,6 +25,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
   const [giaiConLai, setGiaiConLai] = useState({});
   const [dataRadom, setDataRandom] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [luckyMember, setLuckyMember] = useState(null);
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const [giai, setGiai] = useState("");
 
@@ -91,6 +92,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
         text: "The number of prizes or lucky numbers has been exhausted to conduct the bonus.",
       });
     }
+    randomFunc();
     setGiai(value);
     setIsLoadingRandom(true);
   };
@@ -109,6 +111,11 @@ const QuaySoTab = ({ dsTrungGiai }) => {
     }
   }, [dsTrungGiai]);
 
+  const randomFunc = () => {
+    const random = Math.floor(Math.random() * dataRadom.length);
+    setLuckyMember(dataRadom[random]);
+  };
+  console.log("winner", winner);
   return (
     <div
       className="w-100 "
@@ -125,7 +132,6 @@ const QuaySoTab = ({ dsTrungGiai }) => {
             position: "relative",
           }}
         >
-          
           <div
             style={{
               position: "absolute",
@@ -140,7 +146,6 @@ const QuaySoTab = ({ dsTrungGiai }) => {
               width: "90vw",
             }}
           >
-   
             <h2
               className="font-large text-center border-text-white text-orange mx-auto"
               style={{
@@ -156,6 +161,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
                   users={dataRadom}
                   setDataRandom={setDataRandom}
                   setIsLoadingRandom={setIsLoadingRandom}
+                  luckyMember={luckyMember}
                   setWinner={setWinner}
                   giai={giai}
                 />
