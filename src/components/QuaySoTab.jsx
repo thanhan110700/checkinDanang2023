@@ -63,19 +63,16 @@ const QuaySoTab = ({ dsTrungGiai }) => {
       let dsTrungGiaiSnap = await getDocs(collection(db, "dstrunggiai"));
 
       setUnitArr = setUnitArr.filter((u) => {
-        return (
-          !dsTrungGiaiSnap.docs.find((d) => {
-            return (
-              d.data().qrcode === u.qrcode
-              // ||
-              // d.data().tencongty.toUpperCase().trim() ===
-              //   u.tencongty.toUpperCase().trim()
-            );
-          }) &&
-          u.somayman &&
-          u.somayman !== ""
-        );
+        return !dsTrungGiaiSnap.docs.find((d) => {
+          return (
+            d.data().qrcode === u.qrcode
+            // ||
+            // d.data().tencongty.toUpperCase().trim() ===
+            //   u.tencongty.toUpperCase().trim()
+          );
+        });
       });
+      console.log(setUnitArr);
       setDataRandom(setUnitArr);
     });
 
@@ -85,6 +82,7 @@ const QuaySoTab = ({ dsTrungGiai }) => {
   }, []);
 
   const handleQuayGiai = (key, value) => {
+    console.log(dataRadom);
     if (dataRadom.length < 1) {
       return Swal.fire({
         icon: "error",

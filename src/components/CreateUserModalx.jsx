@@ -79,7 +79,7 @@ const CreateUserModal = ({ modalIsOpen, setIsOpen }) => {
             name="soban"
             value={form?.soban}
           />
-
+          {/* 
           <p className="mb-0 mt-2">Số may mắn </p>
           <input
             className="form-control"
@@ -87,7 +87,7 @@ const CreateUserModal = ({ modalIsOpen, setIsOpen }) => {
             name="somayman"
             value={form?.somayman}
             onChange={handleChange}
-          />
+          /> */}
 
           <p className="mb-0 mt-2">Tên công ty</p>
           <input
