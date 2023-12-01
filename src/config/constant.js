@@ -4,4 +4,4 @@ export const MODE_SETTING_CHECK_IN = {
 };
 export const READY_TIME_DEFAULT = 5;
 
-export const API_CONVERT_IMAGE = "http://20.92.163.127/upload";
+export const API_CONVERT_IMAGE = "https://checkincangdanang2023.xyz/upload";

@@ -61,22 +61,32 @@ const CameraCustom = ({
     })
       .then((res) => res.json())
       .then((data) => {
-        const { error } = data;
-        console.log(error);
-        if (error) {
-          toast.error("Chụp ảnh Thất bại, không nhận diện được khuôn mặt!", {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            style: {
-              width: "60vw", // Set the width
-              fontSize: "1.15vw",
-            },
-          });
+        if (data.hasOwnProperty("error")) {
+          toast.error(
+            `Chụp ảnh Thất bại, không nhận diện được khuôn mặt! ${
+              isAuto
+                ? `Chúng tôi sẽ lấy lại hình ảnh của bạn sau ${settingCheckIn.ready_time} giây`
+                : "Hãy thực hiện lại thao tác chụp ảnh"
+            }`,
+            {
+              position: "top-left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              style: {
+                width: "60vw", // Set the width
+                fontSize: "1.15vw",
+              },
+            }
+          );
+          if (isAuto && useCamera) {
+            setTimeout(() => {
+              capture();
+            }, readyTime * 1000);
+          }
           return;
         }
         handleUpdateData(data.url);
